@@ -23,7 +23,9 @@ interface IQuery
 	function Execute($params = array());
 }
 
-interface IQueryResult extends Countable, Iterable
+// these will need to support multiple result sets like you get from mysql stored procs.
+// when iterating over a result set I should have the option to have my own class type returned
+interface IQueryResult extends Countable, Iterator, ArrayAccess
 {
 
 }
@@ -31,6 +33,15 @@ interface IQueryResult extends Countable, Iterable
 interface IQueryRow extends Countable
 {
 	function Get($n);
+}
+
+// If you want to provide your own class for use when iterating over a result
+// set, it should implement this class.
+// Your class will then be instantiated (default constructor), and this method
+// will be called with the current IQueryRow
+interface IQueryRowBindable
+{
+	function Something(IQueryRow $row);
 }
 
 class DatabaseConnection implements IDatabaseConnection
